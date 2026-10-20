@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG 노드 좌표 등록 도구</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 24px;
+            color: #222;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        select, input, button {
+            padding: 9px;
+            font-size: 14px;
+        }
+
+        #map-area {
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow: auto;
+            background: #f7f7f7;
+        }
+
+        #floor-map {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: auto;
+            cursor: crosshair;
+        }
+
+        #map-wrapper {
+            position: relative;
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            margin: auto;
+        }
+
+        #markers {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .marker {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: red;
+            border: 2px solid white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-sizing: border-box;
+        }
+
+        #message {
+            margin: 12px 0;
+        }
+
+        #coordinates {
+            padding: 12px;
+            background: #f1f5f9;
+            line-height: 1.8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #table-area {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<h1>SVG 노드 좌표 등록 도구</h1>
+<p>건물과 층을 선택한 뒤 도면을 클릭해 좌표를 등록하세요.</p>
+
+<div class="controls">
+    <select id="building">
+        <option value="Y05">제5공학관</option>
+        <option value="Y09">함박관</option>
+        <option value="Y02">창조관</option>
+    </select>
+
+    <select id="floor"></select>
+
+    <select id="node-type">
+        <option value="ENTRANCE">입구</option>
+        <option value="CORRIDOR">복도</option>
+        <option value="CLASSROOM">강의실</option>
+        <option value="ELEVATOR">엘리베이터</option>
+    </select>
+
+    <input id="node-name" placeholder="노드 이름 (선택)">
+    <button id="add-node" disabled>좌표 등록</button>
+    <button id="download">CSV 저장</button>
+</div>
+
+<div id="message">도면을 불러오는 중...</div>
+
+<div id="map-area">
+    <div id="map-wrapper">
+        <img id="floor-map" alt="선택한 층의 SVG 도면">
+        <div id="markers"></div>
+    </div>
+</div>
+
+<div id="coordinates">
+    도면을 클릭하면 좌표가 여기에 표시됩니다.
+</div>
+
+<h2>등록된 노드</h2>
+<div id="table-area">
+    <table>
+        <thead>
+        <tr>
+            <th>층</th>
+            <th>노드 이름</th>
+            <th>종류</th>
+            <th>X</th>
+            <th>Y</th>
+            <th>삭제</th>
+        </tr>
+        </thead>
+        <tbody id="node-list"></tbody>
+    </table>
+</div>
+
+<script>
+    const floors = {
+        Y05: [
+            { id: "Y05_1F", name: "1층", file: "5공학관_1F.svg" },
+            { id: "Y05_4F", name: "4층", file: "5공학관_4F.svg" }
+        ],
+        Y09: [
+            { id: "Y09_B1F", name: "B1층", file: "함박관_B1F.svg" },
+            { id: "Y09_1F", name: "1층", file: "함박관_1F.svg" },
+            { id: "Y09_2F", name: "2층", file: "함박관_2F.svg" },
+            { id: "Y09_3F", name: "3층", file: "함박관_3F.svg" },
+            { id: "Y09_4F", name: "4층", file: "함박관_4F.svg" },
+            { id: "Y09_5F", name: "5층", file: "함박관_5F.svg" }
+        ],
+        Y02: [
+            { id: "Y02_4F", name: "4층", file: "창조관_4F.svg" },
+            { id: "Y02_5F", name: "5층", file: "창조관_5F.svg" }
+        ]
+    };
+
+    const buildingSelect = document.getElementById("building");
+    const floorSelect = document.getElementById("floor");
+    const map = document.getElementById("floor-map");
+    const markers = document.getElementById("markers");
+    const message = document.getElementById("message");
+    const coordinateInfo = document.getElementById("coordinates");
+    const addButton = document.getElementById("add-node");
+    const nodeList = document.getElementById("node-list");
+
+    let selectedPoint = null;
+    let nodes = [];
+    let nextNodeId = 1;
+
+    function updateFloors() {
+        const buildingId = buildingSelect.value;
+        floorSelect.innerHTML = "";
+
+        floors[buildingId].forEach(floor => {
+            const option = document.createElement("option");
+            option.value = floor.id;
+            option.textContent = floor.name;
+            floorSelect.appendChild(option);
+        });
+
+        loadMap();
+    }
+
+    function loadMap() {
+        const buildingId = buildingSelect.value;
+        const floorId = floorSelect.value;
+        const floor = floors[buildingId].find(item => item.id === floorId);
+
+        selectedPoint = null;
+        addButton.disabled = true;
+        coordinateInfo.textContent =
+            "도면을 클릭하면 좌표가 여기에 표시됩니다.";
+
+        map.removeAttribute("src");
+        message.textContent = "도면을 불러오는 중...";
+
+        map.onload = () => {
+            message.textContent = "도면을 불러왔습니다. 원하는 위치를 클릭하세요.";
+            renderNodes();
+        };
+
+        map.onerror = () => {
+            message.textContent =
+                "도면을 불러오지 못했습니다. 파일 이름과 경로를 확인하세요.";
+        };
+
+        map.src = "svg/" + floor.file;
+    }
+
+    map.addEventListener("click", event => {
+        if (!map.naturalWidth || !map.naturalHeight) {
+            return;
+        }
+
+        const rect = map.getBoundingClientRect();
+
+        const x = Math.round(
+            (event.clientX - rect.left) *
+            map.naturalWidth / rect.width
+        );
+
+        const y = Math.round(
+            (event.clientY - rect.top) *
+            map.naturalHeight / rect.height
+        );
+
+        selectedPoint = { x, y };
+        addButton.disabled = false;
+
+        coordinateInfo.textContent =
+            `선택한 좌표: X = ${x}, Y = ${y}`;
+    });
+
+    addButton.addEventListener("click", () => {
+        if (!selectedPoint) return;
+
+        const node = {
+            nodeId: nextNodeId++,
+            buildingId: buildingSelect.value,
+            floorId: floorSelect.value,
+            nodeName: document.getElementById("node-name").value.trim(),
+            nodeType: document.getElementById("node-type").value,
+            x: selectedPoint.x,
+            y: selectedPoint.y
+        };
+
+        nodes.push(node);
+        renderNodes();
+
+        document.getElementById("node-name").value = "";
+        selectedPoint = null;
+        addButton.disabled = true;
+
+        coordinateInfo.textContent =
+            "등록 완료! 다음 위치를 클릭하세요.";
+    });
+
+    function renderNodes() {
+        nodeList.innerHTML = "";
+        markers.innerHTML = "";
+
+        nodes.forEach(node => {
+            if (node.floorId !== floorSelect.value) return;
+
+            const marker = document.createElement("div");
+            marker.className = "marker";
+            marker.style.left =
+                (node.x / map.naturalWidth * 100) + "%";
+            marker.style.top =
+                (node.y / map.naturalHeight * 100) + "%";
+            marker.title = node.nodeName || node.nodeType;
+
+            markers.appendChild(marker);
+        });
+
+        nodes.forEach((node, index) => {
+            const row = document.createElement("tr");
+
+            [
+                node.floorId,
+                node.nodeName || "-",
+                node.nodeType,
+                node.x,
+                node.y
+            ].forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value;
+                row.appendChild(cell);
+            });
+
+            const actionCell = document.createElement("td");
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "삭제";
+
+            deleteButton.addEventListener("click", () => {
+                nodes.splice(index, 1);
+                renderNodes();
+            });
+
+            actionCell.appendChild(deleteButton);
+            row.appendChild(actionCell);
+            nodeList.appendChild(row);
+        });
+    }
+
+    document.getElementById("download").addEventListener("click", () => {
+        if (nodes.length === 0) {
+            alert("먼저 좌표를 등록하세요.");
+            return;
+        }
+
+        const header = [
+            "node_id", "building_id", "floor_id",
+            "node_name", "node_type", "x", "y"
+        ];
+
+        const escapeCsv = value =>
+            '"' + String(value ?? "").replace(/"/g, '""') + '"';
+
+        const rows = nodes.map(node => [
+            node.nodeId,
+            node.buildingId,
+            node.floorId,
+            node.nodeName,
+            node.nodeType,
+            node.x,
+            node.y
+        ]);
+
+        const csv = [header, ...rows]
+            .map(row => row.map(escapeCsv).join(","))
+            .join("\r\n");
+
+        const blob = new Blob(
+            ["\uFEFF" + csv],
+            { type: "text/csv;charset=utf-8;" }
+        );
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "nodes.csv";
+        link.click();
+        URL.revokeObjectURL(url);
+    });
+
+    buildingSelect.addEventListener("change", () => {
+        updateFloors();
+        renderNodes();
+    });
+
+    floorSelect.addEventListener("change", () => {
+        loadMap();
+        renderNodes();
+    });
+
+    updateFloors();
+</script>
+</body>
+</html>
