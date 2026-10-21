@@ -322,7 +322,7 @@
         }
 
         const header = [
-            "node_id", "building_id", "floor_id",
+            "building_id", "floor_id",
             "node_name", "node_type", "x", "y"
         ];
 
@@ -330,7 +330,6 @@
             '"' + String(value ?? "").replace(/"/g, '""') + '"';
 
         const rows = nodes.map(node => [
-            node.nodeId,
             node.buildingId,
             node.floorId,
             node.nodeName,
