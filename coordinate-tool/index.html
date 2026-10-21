@@ -285,29 +285,57 @@
             `선택한 좌표: X = ${x}, Y = ${y}`;
     });
 
-    addButton.addEventListener("click", () => {
+
+    addButton.addEventListener("click", async () => {
         if (!selectedPoint) return;
 
         const node = {
-            nodeId: nextNodeId++,
-            buildingId: buildingSelect.value,
-            floorId: floorSelect.value,
-            nodeName: document.getElementById("node-name").value.trim(),
-            nodeType: document.getElementById("node-type").value,
+            building_id: buildingSelect.value,
+            floor_id: floorSelect.value,
+            node_name: document.getElementById("node-name").value.trim(),
+            node_type: document.getElementById("node-type").value,
             x: selectedPoint.x,
             y: selectedPoint.y
         };
 
-        nodes.push(node);
-        renderNodes();
+        try {
+            const response = await fetch("/api/nodes", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(node)
+            });
 
-        document.getElementById("node-name").value = "";
-        selectedPoint = null;
-        addButton.disabled = true;
+            const result = await response.json();
 
-        coordinateInfo.textContent =
-            "등록 완료! 다음 위치를 클릭하세요.";
+            if (!response.ok) {
+                throw new Error(result.error || "좌표 저장에 실패했습니다.");
+            }
+
+            nodes.push({
+                nodeId: result.node_id,
+                buildingId: node.building_id,
+                floorId: node.floor_id,
+                nodeName: node.node_name,
+                nodeType: node.node_type,
+                x: node.x,
+                y: node.y
+            });
+
+            renderNodes();
+
+            document.getElementById("node-name").value = "";
+            selectedPoint = null;
+            addButton.disabled = true;
+
+            coordinateInfo.textContent = "DB 저장 완료! 다음 위치를 클릭하세요.";
+        } catch (error) {
+            console.error("노드 저장 오류:", error);
+            coordinateInfo.textContent = "노드 저장 오류: " + error.message;
+        }
     });
+
 
     function renderNodes() {
         nodeList.innerHTML = "";

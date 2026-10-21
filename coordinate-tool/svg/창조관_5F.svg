@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 900" font-family="Noto Sans KR, sans-serif">
+<rect width="580" height="900" fill="#EEF1EC"/>
+<polygon points="20,16 416,16 416,552 316,552 316,728 36,728" fill="#F5F6F2" stroke="#9AA6B4" stroke-width="2"/>
+<rect x="28" y="24" width="80" height="128" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="68.0" y="93.0" text-anchor="middle" font-size="14" font-weight="700" fill="#13294B">2532</text>
+<rect x="32" y="156" width="80" height="124" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="72.0" y="223.0" text-anchor="middle" font-size="14" font-weight="700" fill="#13294B">2529</text>
+<rect x="36" y="284" width="80" height="120" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="76.0" y="349.0" text-anchor="middle" font-size="14" font-weight="700" fill="#13294B">2526</text>
+<rect x="40" y="408" width="80" height="104" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="80.0" y="465.0" text-anchor="middle" font-size="14" font-weight="700" fill="#13294B">2523</text>
+<rect x="44" y="524" width="80" height="76" fill="#E2E8DC" stroke="#9AA6B4"/>
+<text x="84.0" y="567.0" text-anchor="middle" font-size="14" font-weight="500" fill="#13294B">화장실</text>
+<rect x="48" y="608" width="76" height="48" fill="#FBE3CC" stroke="#9AA6B4"/>
+<text x="86.0" y="637.0" text-anchor="middle" font-size="14" font-weight="700" fill="#13294B">EV</text>
+<rect x="48" y="684" width="76" height="36" fill="#E7EDF4" stroke="#9AA6B4"/>
+<line x1="54" y1="692" x2="118" y2="692" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="54" y1="701" x2="118" y2="701" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="54" y1="710" x2="118" y2="710" stroke="#B8C2CE" stroke-width="1"/>
+<text x="86.0" y="707.0" text-anchor="middle" font-size="14" font-weight="700" fill="#13294B">계단</text>
+<rect x="140" y="24" width="164" height="132" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="222.0" y="95.0" text-anchor="middle" font-size="14" font-weight="700" fill="#13294B">2535</text>
+<rect x="324" y="32" width="84" height="120" fill="#E2E8DC" stroke="#9AA6B4"/>
+<text x="366.0" y="97.0" text-anchor="middle" font-size="14" font-weight="500" fill="#13294B">화장실</text>
+<rect x="324" y="156" width="80" height="36" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="364.0" y="172.0" text-anchor="middle" font-size="14" font-weight="700" fill="#13294B">2504</text>
+<text x="364.0" y="188.0" text-anchor="middle" font-size="10" fill="#56606E">휴게실</text>
+<rect x="324" y="228" width="80" height="52" fill="#FBE3CC" stroke="#9AA6B4"/>
+<text x="364.0" y="259.0" text-anchor="middle" font-size="14" font-weight="700" fill="#13294B">EV</text>
+<rect x="324" y="284" width="80" height="36" fill="#E7EDF4" stroke="#9AA6B4"/>
+<line x1="330" y1="292" x2="398" y2="292" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="330" y1="301" x2="398" y2="301" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="330" y1="310" x2="398" y2="310" stroke="#B8C2CE" stroke-width="1"/>
+<text x="364.0" y="307.0" text-anchor="middle" font-size="14" font-weight="700" fill="#13294B">계단</text>
+<rect x="324" y="324" width="80" height="120" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="364.0" y="389.0" text-anchor="middle" font-size="14" font-weight="700" fill="#13294B">2508</text>
+<rect x="324" y="444" width="80" height="104" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="364.0" y="501.0" text-anchor="middle" font-size="14" font-weight="700" fill="#13294B">2511</text>
+<rect x="144" y="316" width="156" height="200" fill="#E7EDF4" stroke="#9AA6B4"/>
+<line x1="150" y1="324" x2="294" y2="324" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="333" x2="294" y2="333" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="342" x2="294" y2="342" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="351" x2="294" y2="351" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="360" x2="294" y2="360" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="369" x2="294" y2="369" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="378" x2="294" y2="378" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="387" x2="294" y2="387" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="396" x2="294" y2="396" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="405" x2="294" y2="405" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="414" x2="294" y2="414" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="423" x2="294" y2="423" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="432" x2="294" y2="432" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="441" x2="294" y2="441" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="450" x2="294" y2="450" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="459" x2="294" y2="459" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="468" x2="294" y2="468" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="477" x2="294" y2="477" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="486" x2="294" y2="486" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="495" x2="294" y2="495" stroke="#B8C2CE" stroke-width="1"/>
+<line x1="150" y1="504" x2="294" y2="504" stroke="#B8C2CE" stroke-width="1"/>
+<text x="222.0" y="421.0" text-anchor="middle" font-size="14" font-weight="700" fill="#13294B">대계단</text>
+<text x="224" y="600" text-anchor="middle" font-size="13" fill="#56606E">로비</text>
+<text x="570" y="892" text-anchor="end" font-size="11" fill="#56606E">창조관 5층 · 층별 안내도 기반 근사 도면</text>
+</svg>

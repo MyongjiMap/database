@@ -17,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/skdud-source/teamproject1/issues"
   },
-  "homepage": "https://github.com/skdud-source/teamproject1#readme"
+  "homepage": "https://github.com/skdud-source/teamproject1#readme",
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "express": "^5.3.0"
+  }
 }

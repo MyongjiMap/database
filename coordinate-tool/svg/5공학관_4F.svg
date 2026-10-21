@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" font-family="Noto Sans KR, sans-serif">
+<rect width="1000" height="300" fill="#EEF1EC"/>
+<rect x="0" y="135" width="987" height="30" fill="#F5F6F2" stroke="#C9D3DF"/>
+<rect x="819" y="30" width="168" height="240" fill="#F5F6F2" stroke="#9AA6B4" stroke-dasharray="6 4"/>
+<text x="903.0" y="215" text-anchor="middle" font-size="12" fill="#56606E">연결동</text>
+<rect x="4" y="40" width="179" height="95" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="93.5" y="91.5" text-anchor="middle" font-size="13" font-weight="500" fill="#13294B">5420</text>
+<rect x="183" y="40" width="39" height="95" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="202.5" y="87.5" text-anchor="middle" font-size="10" fill="#13294B" transform="rotate(-90 202.5 87.5)">5419</text>
+<rect x="222" y="40" width="67" height="95" fill="#E7EDF4" stroke="#9AA6B4"/>
+<text x="255.5" y="91.5" text-anchor="middle" font-size="13" font-weight="700" fill="#13294B">계단A</text>
+<rect x="289" y="40" width="101" height="95" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="339.5" y="91.5" text-anchor="middle" font-size="13" font-weight="500" fill="#13294B">5414</text>
+<rect x="390" y="40" width="101" height="95" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="440.5" y="91.5" text-anchor="middle" font-size="13" font-weight="500" fill="#13294B">5411</text>
+<rect x="491" y="40" width="129" height="95" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="555.5" y="91.5" text-anchor="middle" font-size="13" font-weight="500" fill="#13294B">5407</text>
+<rect x="620" y="40" width="66" height="95" fill="#E7EDF4" stroke="#9AA6B4"/>
+<text x="653.0" y="91.5" text-anchor="middle" font-size="13" font-weight="700" fill="#13294B">계단B</text>
+<rect x="686" y="40" width="133" height="95" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="752.5" y="91.5" text-anchor="middle" font-size="13" font-weight="500" fill="#13294B">5401</text>
+<rect x="838" y="40" width="70" height="95" fill="#FBE3CC" stroke="#9AA6B4"/>
+<text x="873.0" y="91.5" text-anchor="middle" font-size="13" font-weight="700" fill="#13294B">EV</text>
+<rect x="12" y="165" width="109" height="95" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="66.5" y="216.5" text-anchor="middle" font-size="13" font-weight="500" fill="#13294B">5425</text>
+<rect x="121" y="165" width="105" height="95" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="173.5" y="216.5" text-anchor="middle" font-size="13" font-weight="500" fill="#13294B">5428</text>
+<rect x="226" y="165" width="56" height="95" fill="#E2E8DC" stroke="#9AA6B4"/>
+<text x="254.0" y="216.5" text-anchor="middle" font-size="13" font-weight="500" fill="#13294B">화장실</text>
+<rect x="282" y="165" width="30" height="95" fill="#E7EDF4" stroke="#9AA6B4"/>
+<text x="297.0" y="216.5" text-anchor="middle" font-size="10" font-weight="700" fill="#13294B">계단C</text>
+<rect x="312" y="165" width="117" height="95" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="370.5" y="216.5" text-anchor="middle" font-size="13" font-weight="500" fill="#13294B">5434</text>
+<rect x="429" y="165" width="129" height="95" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="493.5" y="216.5" text-anchor="middle" font-size="13" font-weight="500" fill="#13294B">5437</text>
+<rect x="558" y="165" width="125" height="95" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="620.5" y="216.5" text-anchor="middle" font-size="13" font-weight="500" fill="#13294B">5441</text>
+<rect x="683" y="165" width="128" height="95" fill="#FFFFFC" stroke="#9AA6B4"/>
+<text x="747.0" y="216.5" text-anchor="middle" font-size="13" font-weight="500" fill="#13294B">5445</text>
+<circle cx="0" cy="150" r="7" fill="#2E8B57"/>
+<text x="10" y="170" text-anchor="start" font-size="10" fill="#1E5E3A">서측 비상계단</text>
+<circle cx="987" cy="150" r="7" fill="#2E8B57"/>
+<text x="977" y="170" text-anchor="end" font-size="10" fill="#1E5E3A">연결통로(309~321호 방면)</text>
+<text x="10" y="22" font-size="11" fill="#56606E">5공학관 4층 · 피난안내도 기반 근사 도면</text>
+</svg>
