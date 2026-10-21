@@ -103,12 +103,12 @@
 
     <select id="floor"></select>
 
-    <select id="node-type">
-        <option value="ENTRANCE">입구</option>
-        <option value="CORRIDOR">복도</option>
-        <option value="CLASSROOM">강의실</option>
-        <option value="ELEVATOR">엘리베이터</option>
-    </select>
+        <select id="node-type">
+            <option value="ENTRANCE">입구</option>
+            <option value="CORRIDOR">복도</option>
+            <option value="CLASSROOM">강의실</option>
+            <option value="ELEVATOR">엘리베이터</option>
+        </select>
 
     <input id="node-name" placeholder="노드 이름 (선택)">
     <button id="add-node" disabled>좌표 등록</button>
@@ -409,10 +409,40 @@
             const deleteButton = document.createElement("button");
             deleteButton.textContent = "삭제";
 
-            deleteButton.addEventListener("click", () => {
-                nodes.splice(index, 1);
-                renderNodes();
+
+            deleteButton.addEventListener("click", async () => {
+                const node = nodes[index];
+
+                if (!node) return;
+
+                if (!node.nodeId) {
+                    alert("노드 ID를 확인할 수 없습니다.");
+                    return;
+                }
+
+                if (!confirm("이 노드를 데이터베이스에서도 삭제할까요?")) {
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/api/nodes/${node.nodeId}`, {
+                        method: "DELETE"
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.error || "노드 삭제에 실패했습니다.");
+                    }
+
+                    nodes.splice(index, 1);
+                    renderNodes();
+                    message.textContent = "노드가 삭제되었습니다.";
+                } catch (error) {
+                    alert(error.message);
+                }
             });
+
 
             actionCell.appendChild(deleteButton);
             row.appendChild(actionCell);

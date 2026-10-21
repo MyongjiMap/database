@@ -31,6 +31,39 @@ app.get('/api/nodes', (req, res) => {
     res.json(nodes);
 });
 
+
+app.delete('/api/nodes/:id', (req, res) => {
+    try {
+        const nodeId = Number(req.params.id);
+
+        if (!Number.isInteger(nodeId) || nodeId <= 0) {
+            return res.status(400).json({
+                error: '올바르지 않은 노드 ID입니다.'
+            });
+        }
+
+        const result = db.prepare(
+            'DELETE FROM nodes WHERE node_id = ?'
+        ).run(nodeId);
+
+        if (result.changes === 0) {
+            return res.status(404).json({
+                error: '삭제할 노드를 찾을 수 없습니다.'
+            });
+        }
+
+        res.json({
+            message: '노드가 삭제되었습니다.'
+        });
+    } catch (error) {
+        console.error('노드 삭제 오류:', error.message);
+        res.status(500).json({
+            error: '노드 삭제에 실패했습니다.'
+        });
+    }
+});
+
+
 // 서버 실행
 app.listen(PORT, () => {
     console.log(`서버 실행 주소: http://localhost:${PORT}`);
