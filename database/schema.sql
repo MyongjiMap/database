@@ -67,4 +67,28 @@ CREATE INDEX IF NOT EXISTS idx_classrooms_room
     ON classrooms(room_number);
 
 CREATE INDEX IF NOT EXISTS idx_edges_start
-    ON edges(start_node_id);
+    ON edges(start_node_id)
+
+
+-- 6. 편의시설 정보
+CREATE TABLE IF NOT EXISTS facilities (
+                                          facility_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+                                          building_id   TEXT NOT NULL,
+                                          floor_id      TEXT NOT NULL,
+                                          facility_type TEXT NOT NULL
+                                              CHECK (facility_type IN ('CAFE', 'PRINT', 'TOILET')),
+                                          facility_name TEXT NOT NULL,
+                                          facility_code TEXT,
+                                          x             REAL NOT NULL,  -- SVG viewBox 기준
+                                          y             REAL NOT NULL,  -- SVG viewBox 기준
+                                          FOREIGN KEY (building_id) REFERENCES buildings(building_id),
+                                          FOREIGN KEY (floor_id) REFERENCES floors(floor_id)
+);
+
+-- 시설 조회 성능을 위한 인덱스
+CREATE INDEX IF NOT EXISTS idx_facilities_floor
+    ON facilities(building_id, floor_id);
+
+-- 시설 코드 중복 방지
+CREATE UNIQUE INDEX IF NOT EXISTS idx_facilities_code
+    ON facilities(facility_code);

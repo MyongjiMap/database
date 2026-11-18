@@ -63,6 +63,28 @@
             box-sizing: border-box;
         }
 
+
+        .facility-marker {
+            width: 16px;
+            height: 16px;
+            background: #2563eb;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        .facility-marker.CAFE {
+            background: #16a34a;
+        }
+
+        .facility-marker.PRINT {
+            background: #d97706;
+        }
+
+        .facility-marker.TOILET {
+            background: #7c3aed;
+        }
+
+
         #message {
             margin: 12px 0;
         }
@@ -113,6 +135,20 @@
     <input id="node-name" placeholder="노드 이름 (선택)">
     <button id="add-node" disabled>좌표 등록</button>
     <button id="download">CSV 저장</button>
+    <hr>
+
+    <h2>시설 등록</h2>
+
+    <select id="facility-type">
+        <option value="CAFE">카페</option>
+        <option value="PRINT">프린터</option>
+        <option value="TOILET">화장실</option>
+    </select>
+
+    <input id="facility-name" placeholder="시설 이름">
+    <input id="facility-code" placeholder="시설 코드">
+
+    <button id="add-facility" disabled>시설 좌표 등록</button>
 </div>
 
 <div id="message">도면을 불러오는 중...</div>
@@ -145,6 +181,27 @@
     </table>
 </div>
 
+
+<h2>등록된 시설</h2>
+
+<div id="facility-table-area">
+    <table>
+        <thead>
+        <tr>
+            <th>층</th>
+            <th>시설 코드</th>
+            <th>시설 이름</th>
+            <th>종류</th>
+            <th>X</th>
+            <th>Y</th>
+            <th>삭제</th>
+        </tr>
+        </thead>
+        <tbody id="facility-list"></tbody>
+    </table>
+</div>
+
+
 <script>
     const floors = {
         Y05: [
@@ -172,10 +229,13 @@
     const message = document.getElementById("message");
     const coordinateInfo = document.getElementById("coordinates");
     const addButton = document.getElementById("add-node");
+    const addFacilityButton = document.getElementById("add-facility");
     const nodeList = document.getElementById("node-list");
+    const facilityList = document.getElementById("facility-list");
 
     let selectedPoint = null;
     let nodes = [];
+    let facilities = [];
     let nextNodeId = 1;
     let loadToken = 0;
 
@@ -224,6 +284,7 @@
 
         selectedPoint = null;
         addButton.disabled = true;
+        addFacilityButton.disabled = true;
         coordinateInfo.textContent =
             "도면을 클릭하면 좌표가 여기에 표시됩니다.";
 
@@ -280,6 +341,7 @@
 
         selectedPoint = { x, y };
         addButton.disabled = false;
+        addFacilityButton.disabled = false;
 
         coordinateInfo.textContent =
             `선택한 좌표: X = ${x}, Y = ${y}`;
@@ -337,6 +399,70 @@
     });
 
 
+    /* 시설 좌표를 데이터베이스에 저장 */
+    addFacilityButton.addEventListener("click", async () => {
+        if (!selectedPoint) {
+            alert("먼저 지도에서 시설 위치를 클릭해 주세요.");
+            return;
+        }
+
+        const facility = {
+            building_id: buildingSelect.value,
+            floor_id: floorSelect.value,
+            facility_type: document.getElementById("facility-type").value,
+            facility_name: document.getElementById("facility-name").value.trim(),
+            facility_code: document.getElementById("facility-code").value.trim(),
+            x: selectedPoint.x,
+            y: selectedPoint.y
+        };
+
+        if (!facility.facility_name || !facility.facility_code) {
+            alert("시설 이름과 시설 코드를 입력해 주세요.");
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/facilities", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(facility)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || "시설 저장에 실패했습니다.");
+            }
+
+            alert("시설 좌표가 저장되었습니다!");
+            facilities.push({
+                facilityId: result.facility_id,
+                buildingId: facility.building_id,
+                floorId: facility.floor_id,
+                facilityType: facility.facility_type,
+                facilityName: facility.facility_name,
+                facilityCode: facility.facility_code,
+                x: facility.x,
+                y: facility.y
+            });
+
+            renderNodes();
+
+            document.getElementById("facility-name").value = "";
+            document.getElementById("facility-code").value = "";
+
+            selectedPoint = null;
+            addFacilityButton.disabled = true;
+
+        } catch (error) {
+            alert(error.message);
+        }
+    });
+
+
+
 
     async function loadSavedNodes() {
         try {
@@ -370,9 +496,71 @@
     }
 
 
+    async function loadSavedFacilities() {
+        try {
+            const response = await fetch("/api/facilities");
+
+            if (!response.ok) {
+                throw new Error("시설 정보를 불러오지 못했습니다.");
+            }
+
+            const data = await response.json();
+
+            facilities = data.map(facility => ({
+                facilityId: facility.facility_id,
+                buildingId: facility.building_id,
+                floorId: facility.floor_id,
+                facilityType: facility.facility_type,
+                facilityName: facility.facility_name,
+                facilityCode: facility.facility_code,
+                x: facility.x,
+                y: facility.y
+            }));
+
+            renderNodes();
+
+        } catch (error) {
+            console.error("시설 불러오기 오류:", error);
+            message.textContent = "시설 정보를 불러오지 못했습니다.";
+        }
+    }
+
+
+    async function deleteFacility(facilityId) {
+        if (!confirm("이 시설을 데이터베이스에서도 삭제할까요?")) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/facilities/${facilityId}`, {
+                method: "DELETE"
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || "시설 삭제에 실패했습니다.");
+            }
+
+            facilities = facilities.filter(
+                facility => facility.facilityId !== facilityId
+            );
+
+            renderNodes();
+            message.textContent = "시설이 삭제되었습니다.";
+
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+
+
+
     function renderNodes() {
         nodeList.innerHTML = "";
         markers.innerHTML = "";
+        facilityList.innerHTML = "";
 
         if (box.width && box.height) {
             nodes.forEach(node => {
@@ -448,6 +636,46 @@
             row.appendChild(actionCell);
             nodeList.appendChild(row);
         });
+
+
+// 현재 층의 시설 표시
+        facilities
+            .filter(facility =>
+                facility.buildingId === buildingSelect.value &&
+                facility.floorId === floorSelect.value
+            )
+            .forEach(facility => {
+                const marker = document.createElement("div");
+
+                marker.className = `marker facility-marker ${facility.facilityType}`;
+                marker.style.left =
+                    ((facility.x - box.minX) / box.width * 100) + "%";
+
+                marker.style.top =
+                    ((facility.y - box.minY) / box.height * 100) + "%";
+                marker.title = `${facility.facilityName} (${facility.facilityCode})`;
+
+                markers.appendChild(marker);
+
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+            <td>${facility.floorId}</td>
+            <td>${facility.facilityCode}</td>
+            <td>${facility.facilityName}</td>
+            <td>${facility.facilityType}</td>
+            <td>${facility.x}</td>
+            <td>${facility.y}</td>
+            <td>
+                <button onclick="deleteFacility(${facility.facilityId})">
+                    삭제
+                </button>
+            </td>
+        `;
+
+                facilityList.appendChild(row);
+            });
+
     }
 
     document.getElementById("download").addEventListener("click", () => {
@@ -494,6 +722,7 @@
     floorSelect.addEventListener("change", loadMap);
 
     loadSavedNodes();
+    loadSavedFacilities();
     updateFloors();
 </script>
 </body>
