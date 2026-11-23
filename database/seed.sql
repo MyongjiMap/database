@@ -40,7 +40,7 @@ VALUES
     ('Y09', 'Y09_B1F', 'TOILET', '화장실', 'Y09_B1F_TOILET_01', 722.5, 370),
     ('Y09', 'Y09_1F', 'TOILET', '화장실', 'Y09_1F_TOILET_01', 700, 370),
     ('Y09', 'Y09_2F', 'TOILET', '화장실', 'Y09_2F_TOILET_01', 704, 370),
-    ('Y09', 'Y09_3F', 'CAFE', '카페', 'Y09_3F_CAFE_01', 543, 112.5),
+    ('Y09', 'Y09_3F', 'CONVENIENCE', 'CONVENIENCE', 'Y09_3F_CONVENIENCE_01', 543, 112.5),
     ('Y09', 'Y09_3F', 'TOILET', '화장실', 'Y09_3F_TOILET_01', 703.5, 370),
     ('Y09', 'Y09_4F', 'PRINT', '프린터', 'Y09_4F_PRINT_01', 380, 292),
     ('Y09', 'Y09_4F', 'TOILET', '화장실', 'Y09_4F_TOILET_01', 703.5, 370),

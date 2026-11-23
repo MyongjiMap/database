@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS facilities (
                                           building_id   TEXT NOT NULL,
                                           floor_id      TEXT NOT NULL,
                                           facility_type TEXT NOT NULL
-                                              CHECK (facility_type IN ('CAFE', 'PRINT', 'TOILET')),
+                                              CHECK (facility_type IN ('CAFE', 'CONVENIENCE', 'PRINT', 'TOILET')),
                                           facility_name TEXT NOT NULL,
                                           facility_code TEXT,
                                           x             REAL NOT NULL,  -- SVG viewBox 기준
